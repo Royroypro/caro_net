@@ -1,5 +1,7 @@
 <?php
-
+if (ob_get_level() == 0) {
+    ob_start();
+}
 require '../app/config.php';
 
 $id = isset($_GET['id_recibo']) ? $_GET['id_recibo'] : null;
@@ -282,8 +284,10 @@ $result->saveToFile($qrDirectory . $qrFileName);
 
 // Aquí va el resto de su código
 
-ob_end_clean(); // Limpia el búfer de salida y detiene cualquier salida al navegador
-
+// Asegurarse de que no haya salida previa
+if (ob_get_length()) {
+    ob_end_clean();
+}
 
 
 

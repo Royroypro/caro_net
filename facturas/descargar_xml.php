@@ -1,5 +1,8 @@
 <?php
-
+// Activar el búfer de salida para manejar cualquier contenido accidental
+if (ob_get_level() == 0) {
+    ob_start();
+}
 require '../app/config.php';
 
 $id = isset($_GET['id_recibo']) ? $_GET['id_recibo'] : null;
@@ -224,7 +227,11 @@ $xmlName = $invoice->getName() . '.xml';
 file_put_contents($xmlName, $see->getFactory()->getLastXml());
 rename($xmlName, 'xml/' . $xmlName);
 
-ob_end_clean();
+// Asegurarse de que no haya salida previa
+if (ob_get_length()) {
+    ob_end_clean();
+}
+
 
 header('Content-Type: application/octet-stream');
 header('Content-Disposition: attachment; filename="' . $xmlName . '"');

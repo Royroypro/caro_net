@@ -36,6 +36,7 @@ include_once '../app/controllers/venta_planes/consultar_venta.php';
                     <div class="card-body">
                         <h4 class="card-title">Editar venta de Plan</h4>
                         <h6 class="card-subtitle">Complete la información</h6>
+                        <!--  <form action="../app/controllers/venta_planes/editar_venta.php" method="POST" class="form-horizontal m-t-30" enctype="multipart/form-data"> -->
                         <form id="editarPlanForm" method="POST" class="form-horizontal m-t-30" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6">
