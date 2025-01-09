@@ -142,6 +142,8 @@
                         <ul aria-expanded="true" class="collapse first-level" id="submenu-venta-planes" style="margin-left: 5mm; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);">
                             <li class="sidebar-item"><a href="<?php echo $URL; ?>venta_planes/venta_plan.php" class="sidebar-link"><i class="mdi mdi-cash-usd"></i><span class="hide-menu"> Crear Venta</span></a></li>
                             <li class="sidebar-item"><a href="<?php echo $URL; ?>venta_planes/lista_venta.php" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Lista de Ventas </span></a></li>
+                            
+
                         </ul>
                     </li>
 
@@ -150,8 +152,11 @@
                             <i class="mdi mdi-receipt"></i><span class="hide-menu">Facturas </span>
                         </a>
                         <ul aria-expanded="true" class="collapse first-level" id="submenu-facturas" style="margin-left: 5mm; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);">
-                            <li class="sidebar-item"><a href="factura/factura.php" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Generar Factura </span></a></li>
-                            <li class="sidebar-item"><a href="factura/ver-factura.php" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Ver Factura </span></a></li>
+                            
+                        <!-- <li class="sidebar-item"><a href="configuracion.php" class="sidebar-link"><i class="mdi mdi-settings"></i><span class="hide-menu"> Configuración </span></a></li> -->
+                            <li class="sidebar-item"><a href="<?php echo $URL;?>/facturas/emitir_recibo.php" class="sidebar-link"><i class="mdi mdi-receipt"></i><span class="hide-menu">Emitir Recibo </span></a></li>
+                            
+                            <li class="sidebar-item"><a href="<?php echo $URL;?>/facturas/lista_recibos.php" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> lista de recibos</span></a></li>
                         </ul>
                     </li>
 

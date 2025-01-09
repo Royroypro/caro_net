@@ -27,8 +27,7 @@ include_once '../app/config.php';
                                             <th>Cliente</th>
                                             <th>Ip</th>
                                             <th>Ubicacion</th>
-                                            <th>Fecha inicio</th>
-                                            <th>Fecha finalizacion</th>
+                                            <th>Plan</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -58,8 +57,17 @@ include_once '../app/config.php';
                                                 <td><?php echo $row['Ip']; ?></td>
 
                                                 <td><?php echo $row['Ubicacion']; ?></td>
-                                                <td><?php echo $row['Fecha_inicio']; ?></td>
-                                                <td><?php echo $row['Fecha_finalizacion']; ?></td>
+                                                <td>
+                                                    <?php
+                                                    $stmt_plan = $pdo->prepare("SELECT nombre_plan, tarifa_mensual, velocidad, igv_tarifa FROM planes_servicio WHERE id_plan_servicio = :id_plan_servicio");
+                                                    $stmt_plan->bindParam(':id_plan_servicio', $row['id_planes_servicios']);
+                                                    $stmt_plan->execute();
+                                                    $fila_plan = $stmt_plan->fetch();
+                                                    $tarifa_mensual_igv = $fila_plan['tarifa_mensual'] + $fila_plan['igv_tarifa'];
+                                                    echo $fila_plan['nombre_plan'] . " - S/." . $tarifa_mensual_igv . " - Velocidad: " . $fila_plan['velocidad'] . "MB";
+                                                    ?>
+                                                </td>
+                                                
                                                 <td>
                                                     <?php
                                                     if ($row['Estado'] == 1) {
@@ -75,8 +83,9 @@ include_once '../app/config.php';
                                                             Acciones
                                                         </button>
                                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                            <a class="dropdown-item" href="editar_plan.php?id=<?php echo $row['id']; ?>">Editar</a>
-                                                            <a class="dropdown-item" href="eliminar_plan.php?id=<?php echo $row['id']; ?>">Eliminar</a>
+                                                            <a class="dropdown-item" href="editar_venta.php?id=<?php echo $row['id']; ?>">Editar</a>
+                                                            <a class="dropdown-item" href="eliminar_venta.php?id=<?php echo $row['id']; ?>">Eliminar</a>
+                                                            <a class="dropdown-item" href="detalle_venta.php?id=<?php echo $row['id']; ?>">Detalles</a>
                                                         </div>
                                                     </div>
                                                 </td>

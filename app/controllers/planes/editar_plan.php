@@ -9,16 +9,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $datos = json_decode(file_get_contents('php://input'), true);
         $id_plan_servicio = $datos["id_plan"];
         $nombre_plan = $datos["nombre_plan"];
-        $tarifa_mensual = $datos["tarifa_mensual"];
+        $tarifa_mensual = $datos["tarifa_mensual"] - ($datos["tarifa_mensual"] * 0.18);
+        $igv_tarifa = $datos["tarifa_mensual"] * 0.18;
         $descripcion = $datos["descripcion"];
         $velocidad = $datos["velocidad"];
+        $codigo_plan = $datos["codigo_plan"];
 
-        $stmt = $pdo->prepare("UPDATE planes_servicio SET nombre_plan = :nombre_plan, descripcion = :descripcion, tarifa_mensual = :tarifa_mensual, velocidad = :velocidad WHERE id_plan_servicio = :id_plan_servicio");
+        $stmt = $pdo->prepare("UPDATE planes_servicio SET nombre_plan = :nombre_plan, descripcion = :descripcion, tarifa_mensual = :tarifa_mensual, velocidad = :velocidad, codigo_plan = :codigo_plan, igv_tarifa = :igv_tarifa WHERE id_plan_servicio = :id_plan_servicio");
         $stmt->bindParam(':id_plan_servicio', $id_plan_servicio);
         $stmt->bindParam(':nombre_plan', $nombre_plan);
         $stmt->bindParam(':descripcion', $descripcion);
         $stmt->bindParam(':tarifa_mensual', $tarifa_mensual);
         $stmt->bindParam(':velocidad', $velocidad);
+        $stmt->bindParam(':codigo_plan', $codigo_plan);
+        $stmt->bindParam(':igv_tarifa', $igv_tarifa);
         $stmt->execute();
 
         $response['success'] = true;

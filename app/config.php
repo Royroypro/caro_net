@@ -25,7 +25,9 @@ $URL = "http://localhost/caro_net/";
 //Definir la zona horaria
 date_default_timezone_set("America/lima");
 //Definir la fecha y hora actual
-$fechaHora = date('Y-m-d H:i:s');
+$fecha = date('Y-m-d');
+$hora = date('H:i:s');
+$fechaHora = $fecha.' '.$hora;
 
 
 

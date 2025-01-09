@@ -7,14 +7,14 @@ include_once '../app/config.php';
     include_once '../layout/parte1.php';
     ?>
 
-    
+
     <div class="page-wrapper">
-    
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        
+
                         <div class="card-body">
                             <h5 class="card-title">Lista de Planes</h5>
 
@@ -25,9 +25,10 @@ include_once '../app/config.php';
                                         <tr>
                                             <th>N°</th>
                                             <th>Nombre</th>
+                                            <th>Código Plan</th>
                                             <th>Tarifa mensual</th>
                                             <th>Velocidad</th>
-                                            <th>Descripcion</th>
+                                            
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -49,9 +50,12 @@ include_once '../app/config.php';
                                             <tr>
                                                 <td><?php echo $inicio + array_search($row, $planesPagina) + 1; ?></td>
                                                 <td><?php echo $row['nombre_plan']; ?></td>
-                                                <td><?php echo $row['tarifa_mensual']; ?></td>
+                                                <!-- Add this column for Código Plan -->
+                                                <td><?php echo $row['codigo_plan']; ?></td>
+
+                                                <td><?php echo ($row['tarifa_mensual'] + $row['igv_tarifa']); ?></td>
                                                 <td><?php echo $row['velocidad']; ?></td>
-                                                <td><?php echo $row['descripcion']; ?></td>
+                                                
                                                 <td>
                                                     <?php
                                                     if ($row['estado'] == 1) {
@@ -107,7 +111,7 @@ include_once '../app/config.php';
                                 }
                             </script>
 
-                           
+
                         </div>
                     </div>
                 </div>
@@ -118,9 +122,9 @@ include_once '../app/config.php';
 
 
 
-</div> 
+</div>
 
 
 
 
-<?php include('../layout/parte2.php');?>
+<?php include('../layout/parte2.php'); ?>
