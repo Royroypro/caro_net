@@ -92,37 +92,71 @@ include_once '../app/config.php';
 
                                                 </td>
                                                 <td>
-                                                    <!-- Span para el estado -->
-                                                    <span id="estadoSpan<?php echo $row['id_recibo']; ?>" class="badge 
-        <?php
-                                            switch ($row['estado']) {
-                                                case 'NO_ENVIADO':
-                                                    echo 'badge-secondary';
-                                                    break;
-                                                case 'ENVIADO':
-                                                    echo 'badge-info';
-                                                    break;
-                                                case 'VENCIDO':
-                                                    echo 'badge-danger';
-                                                    break;
-                                                case 'PAGADO':
-                                                    echo 'badge-success';
-                                                    break;
-                                                default:
-                                                    echo 'badge-secondary';
-                                                    break;
-                                            }
-        ?>">
-                                                        <?php echo $row['estado']; ?>
-                                                    </span>
-                                                    <!-- Mostrar estado actual -->
-                                                    <div id="estadoActual<?php echo $row['id_recibo']; ?>"></div>
-                                                
-                                                    <!-- Botón para abrir el modal -->
-                                                    <button id="botonCambiarEstado<?php echo $row['id_recibo']; ?>" type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#modalCambiarEstado<?php echo $row['id_recibo']; ?>">
-                                                        <i class="fas fa-edit"></i> Cambiar Estado
-                                                    </button>
-                                                </td>
+    <!-- Span para el estado -->
+    <span id="estadoSpan<?php echo $row['id_recibo']; ?>" class="badge 
+    <?php
+        switch ($row['estado']) {
+            case 'NO_ENVIADO':
+                echo 'badge-secondary';
+                break;
+            case 'ENVIADO':
+                echo 'badge-info';
+                break;
+            case 'VENCIDO':
+                echo 'badge-danger';
+                break;
+            case 'PAGADO':
+                echo 'badge-success';
+                break;
+            default:
+                echo 'badge-secondary';
+                break;
+        }
+    ?>">
+        <?php echo $row['estado']; ?>
+    </span>
+
+
+
+    <!-- Botón para abrir el modal -->
+    <button id="botonCambiarEstado<?php echo $row['id_recibo']; ?>" type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#modalCambiarEstado<?php echo $row['id_recibo']; ?>">
+        <i class="fas fa-edit"></i> Cambiar Estado
+    </button>
+
+
+    <div class="modal fade" id="modalCambiarEstado<?php echo $row['id_recibo']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Cambiar estado del recibo de <?php echo $fila2['nombre'] . ' - ' . $row['dni_ruc']; ?></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <!-- Agregamos un id único para el formulario -->
+                                            <form id="formCambiarEstado<?php echo $row['id_recibo']; ?>">
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="estado">Estado</label>
+                                                        <select class="form-control" id="estado" name="estado" required>
+                                                            <option value="NO_ENVIADO" <?php echo $row['estado'] == 'NO_ENVIADO' ? 'selected' : ''; ?>>No Enviado</option>
+                                                            <option value="ENVIADO" <?php echo $row['estado'] == 'ENVIADO' ? 'selected' : ''; ?>>Enviado</option>
+                                                            <option value="VENCIDO" <?php echo $row['estado'] == 'VENCIDO' ? 'selected' : ''; ?>>Vencido</option>
+                                                            <option value="PAGADO" <?php echo $row['estado'] == 'PAGADO' ? 'selected' : ''; ?>>Pagado</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                    <!-- Cambiamos el botón de tipo submit -->
+                                                    <button type="button" class="btn btn-primary" onclick="guardarEstado(<?php echo $row['id_recibo']; ?>)">Guardar</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+</td>
+
 
 
 
@@ -156,37 +190,7 @@ include_once '../app/config.php';
                                         ?>
                                     </tbody>
                                 </table>
-                                <div class="modal fade" id="modalCambiarEstado<?php echo $row['id_recibo']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Cambiar estado del recibo de <?php echo $fila2['nombre'] . ' - ' . $row['dni_ruc']; ?></h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <!-- Agregamos un id único para el formulario -->
-                                            <form id="formCambiarEstado<?php echo $row['id_recibo']; ?>">
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label for="estado">Estado</label>
-                                                        <select class="form-control" id="estado" name="estado" required>
-                                                            <option value="NO_ENVIADO" <?php echo $row['estado'] == 'NO_ENVIADO' ? 'selected' : ''; ?>>No Enviado</option>
-                                                            <option value="ENVIADO" <?php echo $row['estado'] == 'ENVIADO' ? 'selected' : ''; ?>>Enviado</option>
-                                                            <option value="VENCIDO" <?php echo $row['estado'] == 'VENCIDO' ? 'selected' : ''; ?>>Vencido</option>
-                                                            <option value="PAGADO" <?php echo $row['estado'] == 'PAGADO' ? 'selected' : ''; ?>>Pagado</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                    <!-- Cambiamos el botón de tipo submit -->
-                                                    <button type="button" class="btn btn-primary" onclick="guardarEstado(<?php echo $row['id_recibo']; ?>)">Guardar</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                                
 
 
                                 <div class="pagination">

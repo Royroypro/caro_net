@@ -422,6 +422,6 @@ $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
 
 // Descargar o mostrar el PDF
-$dompdf->stream("recibo_{$recibo['numero_recibo']}.pdf", ["Attachment" => false]); // Cambiar a true para descargar
+$dompdf->stream("{$recibo['numero_recibo']}.pdf", ["Attachment" => false]); // Cambiar a true para descargar
 
 exit;
