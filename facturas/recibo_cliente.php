@@ -1,7 +1,7 @@
 <?php
 
 require '../app/config.php';
-require '../app/sesion.php';
+
 $id = isset($_GET['id_recibo']) ? $_GET['id_recibo'] : null;
 
 
@@ -335,13 +335,15 @@ $html = "
                 display: none !important;
             }
         }
+            
     </style>
 </head>
 <body>
     <div class='buttons'>
         <button onclick='printRecibo()'>Imprimir</button>
-        
         <button onclick='downloadPDF()'>Descargar</button>
+        <p style='font-size: 10px' >Est.:{$estado}</p>
+
     </div>
     <div class='header'>
         " . (!empty($logoSrc) ? "<img src='{$logoSrc}' alt='Logo' class='logo'>" : "") . "

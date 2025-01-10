@@ -20,7 +20,7 @@ try{
 }
 
 //Definir la variable $URL con la ruta del sistema
-$URL = "http://localhost/caro_net/";
+$URL = "https://fuchibol.ddns.net/caro_net/";
 
 //Definir la zona horaria
 date_default_timezone_set("America/lima");
