@@ -4,6 +4,7 @@ if (ob_get_level() == 0) {
     ob_start();
 }
 require '../app/config.php';
+include_once '../layout/sesion.php';
 
 $id = isset($_GET['id_recibo']) ? $_GET['id_recibo'] : null;
 

@@ -3,6 +3,7 @@ if (ob_get_level() == 0) {
     ob_start();
 }
 require '../app/config.php';
+include_once '../layout/sesion.php';
 
 $id = isset($_GET['id_recibo']) ? $_GET['id_recibo'] : null;
 
@@ -315,6 +316,8 @@ $qrBase64 = 'data:image/png;base64,' . base64_encode($qrFileContent);
 
 $tipo_documento = $recibo['Tipo_documento'] ?? '';
 
+$tipo_documento_nombre = $tipo_documento == 'DNI' ? 'Boleta' : 'Factura';
+
 $codPlan = $pdo->prepare("SELECT codigo_plan FROM planes_servicio WHERE id_plan_servicio = :id_plan_servicio");
 $codPlan->execute(['id_plan_servicio' => $recibo['id_plan_servicio']]);
 $codPlan = $codPlan->fetchColumn();
@@ -345,10 +348,10 @@ $html = "
 <body>
     <div class='header'>
         " . (!empty($logoSrc) ? "<img src='{$logoSrc}' alt='Logo' class='logo'>" : "") . "
-        <h1 style='font-size: 24px;'>Recibo N° {$recibo['numero_recibo']}</h1>
+        <h1 style='font-size: 24px;'>{$tipo_documento_nombre} N° {$recibo['numero_recibo']}</h1>
         
     </div>
-    <h2 style='font-size: 20px;'>Código de Recibo: {$recibo['codigo_recibo']}</h2>
+    <h2 style='font-size: 20px;'>Código de {$tipo_documento_nombre}: {$recibo['codigo_recibo']}</h2>
 
     <div class='columns'>
         <div class='details'>

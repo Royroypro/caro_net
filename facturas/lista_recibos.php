@@ -1,5 +1,6 @@
 <?php
 include_once '../app/config.php';
+include_once '../layout/sesion.php';
 ?>
 <div id="main-wrapper">
     <?php

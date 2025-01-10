@@ -1,6 +1,7 @@
 <?php
 
 require '../app/config.php';
+include_once '../layout/sesion.php';
 
 $id = isset($_GET['id_recibo']) ? $_GET['id_recibo'] : null;
 

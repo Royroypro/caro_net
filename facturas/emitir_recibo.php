@@ -1,5 +1,6 @@
 <?php
 include_once '../app/config.php';
+include_once '../layout/sesion.php';
 
 // Verificar la conexión a la base de datos
 if (!$pdo) {

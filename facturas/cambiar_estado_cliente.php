@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once '../app/config.php'; // Asegúrate de incluir tu conexión a la base de datos
-
+include_once '../layout/sesion.php';
 $id_recibo = $_POST['id_recibo'] ?? null;
 $estado = $_POST['estado'] ?? null;
 
