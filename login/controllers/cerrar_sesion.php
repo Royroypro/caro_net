@@ -1,15 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: HILARIWEB
- * Date: 18/1/2023
- * Time: 08:47
- */
 
-include ('../../config.php');
 
-session_start();
-if(isset($_SESSION['sesion_email'])){
-    session_destroy();
-    header('Location: '.$URL.'/');
-}
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
+include ('../../app/config.php');
+
+session_destroy();
+header('Location: '.$URL.'/');
+

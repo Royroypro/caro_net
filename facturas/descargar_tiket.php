@@ -300,6 +300,7 @@ $qrFileContent = file_get_contents($qrDirectory . $qrFileName);
 $qrBase64 = 'data:image/png;base64,' . base64_encode($qrFileContent);
 
 $tipo_documento = $recibo['Tipo_documento'] ?? '';
+$tipo_documento_nombre = $tipo_documento == 'DNI' ? 'Boleta' : 'Factura';
 
 $codPlan = $pdo->prepare("SELECT codigo_plan FROM planes_servicio WHERE id_plan_servicio = :id_plan_servicio");
 $codPlan->execute(['id_plan_servicio' => $recibo['id_plan_servicio']]);
@@ -345,9 +346,9 @@ $html = "
     </div>
     <div class='header'>
         " . (!empty($logoSrc) ? "<img src='{$logoSrc}' alt='Logo' class='logo'>" : "") . "
-        <h1 style='font-size: 14px;'>Recibo N° {$recibo['numero_recibo']}</h1>
+        <h1 style='font-size: 14px;'>{$tipo_documento_nombre} N° {$recibo['numero_recibo']}</h1>
     </div>
-    <h2 style='font-size: 12px;'>Código de Recibo: {$recibo['codigo_recibo']}</h2>
+    <h2 style='font-size: 12px;'>Código de {$tipo_documento_nombre}: {$recibo['codigo_recibo']}</h2>
     <div class='columns'>
         <div class='details'>
             <p><strong>Fecha de Emisión:</strong> {$fecha_emision}</p>
