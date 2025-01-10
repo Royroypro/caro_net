@@ -38,8 +38,8 @@ if(isset($_SESSION['sesion_email'])){
         $estado_empleado = $empleado['Estado'];
     }
 }else{
-    echo "no existe sesion";
-    header('Location: '.$URL.'/index');
+    /* echo "no existe sesion"; */
+    header('Location: '.$URL.'/index.php');
 }
 
 
