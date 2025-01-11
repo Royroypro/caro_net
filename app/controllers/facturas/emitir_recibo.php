@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ':tipo_documento' => $tipoDocumento,
             ':codigo_recibo' => $codigoRecibo,
         ]);
-        echo 'Recibo emitido con éxito.';
+        header('Location: ' . $URL . '/facturas/lista_recibos');
     } catch (PDOException $e) {
         die("Error al emitir el recibo: " . $e->getMessage());
     }

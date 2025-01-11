@@ -9,8 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $datos = json_decode(file_get_contents('php://input'), true);
         $id_plan_servicio = $datos["id_plan"];
         $nombre_plan = $datos["nombre_plan"];
-        $tarifa_mensual = $datos["tarifa_mensual"] - ($datos["tarifa_mensual"] * 0.18);
-        $igv_tarifa = $datos["tarifa_mensual"] * 0.18;
+        $tarifa_mensual = $datos["tarifa_mensual"] / 1.18;
+        $igv_tarifa = $datos["tarifa_mensual"] - $tarifa_mensual;
         $descripcion = $datos["descripcion"];
         $velocidad = $datos["velocidad"];
         $codigo_plan = $datos["codigo_plan"];
@@ -38,3 +38,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 echo json_encode($response);
 exit;
+
