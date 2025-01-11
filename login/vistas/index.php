@@ -66,7 +66,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <div class="p-t-20">
-                                        <button class="btn btn-info" id="to-recover" type="button"><i class="fa fa-lock m-r-5"></i> ¿Contraseña olvidada?</button>
+                                        <!-- <button class="btn btn-info" id="to-recover" type="button"><i class="fa fa-lock m-r-5"></i> ¿Contraseña olvidada?</button> -->
                                         <button class="btn btn-success float-right" type="submit">Login</button>
                                     </div>
                                 </div>
@@ -74,21 +74,21 @@
                         </div>
                     </form>
                 </div>
-                <div id="recoverform">
+                <!-- <div id="recoverform">
                     <div class="text-center">
                         <span class="text-white">Ingrese su dirección de correo electrónico a continuación y le enviaremos instrucciones sobre cómo recuperar su contraseña.</span>
                     </div>
                     <div class="row m-t-20">
-                        <!-- Form -->
+                       
                         <form class="col-12" action="index.html">
-                            <!-- email -->
+                            
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text bg-danger text-white" id="basic-addon1"><i class="ti-email"></i></span>
                                 </div>
                                 <input type="text" class="form-control form-control-lg" placeholder="Email Address" aria-label="Username" aria-describedby="basic-addon1">
                             </div>
-                            <!-- pwd -->
+                            
                             <div class="row m-t-20 p-t-20 border-top border-secondary">
                                 <div class="col-12">
                                     <a class="btn btn-success" href="#" id="to-login" name="action">Back To Login</a>
@@ -97,7 +97,7 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <!-- ============================================================== -->

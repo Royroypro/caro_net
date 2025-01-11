@@ -25,7 +25,7 @@ if (!$pdo) {
                         <option value="" selected>Seleccione un cliente y plan</option>
                         <?php
                         $stmt = $pdo->prepare("
-                            SELECT c.id_cliente, c.nombre, c.apellido_paterno, c.apellido_materno, c.dni_ruc, c.tipo_documento, c.celular, c.email, c.direccion, c.referencia, p.nombre_plan, (p.tarifa_mensual + p.igv_tarifa) AS tarifa_mensual_igv, p.velocidad, p.igv_tarifa 
+                            SELECT c.id_cliente, c.nombre, c.apellido_paterno, c.apellido_materno, c.dni_ruc, c.tipo_documento, c.celular, c.email, c.direccion, c.referencia, p.nombre_plan, p.tarifa_mensual, p.igv_tarifa, p.velocidad 
                             FROM clientes c 
                             JOIN cliente_planes cp ON c.id_cliente = cp.id_cliente 
                             JOIN planes_servicio p ON cp.id_planes_servicios = p.id_plan_servicio
@@ -34,10 +34,13 @@ if (!$pdo) {
                         $stmt->execute();
                         while ($fila = $stmt->fetch()) {
                             $tipo_documento = $fila['tipo_documento'] == 'DNI' ? 'DNI' : 'RUC';
-                            echo "<option value='{$fila['id_cliente']}' data-precio='{$fila['tarifa_mensual_igv']}' data-igv_tarifa='{$fila['igv_tarifa']}' data-tipo-doc='{$fila['tipo_documento']}'>{$fila['nombre']} {$fila['apellido_paterno']} {$fila['apellido_materno']} - {$fila['dni_ruc']} ({$tipo_documento}) - {$fila['nombre_plan']} - S/.{$fila['tarifa_mensual_igv']} - Velocidad: {$fila['velocidad']}MB</option>";
+                            
+                            $tarifa_mensual_igv = $fila['tarifa_mensual'] + $fila['igv_tarifa'];
+                            echo "<option value='{$fila['id_cliente']}' data-precio='{$fila['tarifa_mensual']}' data-igv_tarifa='{$fila['igv_tarifa']}' data-tarifa_mensual_igv='{$tarifa_mensual_igv}' data-tipo_documento='{$fila['tipo_documento']}'>{$fila['nombre']} {$fila['apellido_paterno']} {$fila['apellido_materno']} - {$fila['dni_ruc']} ({$tipo_documento}) - {$fila['nombre_plan']} - S/.{$tarifa_mensual_igv} - Velocidad: {$fila['velocidad']}MB</option>";
                         }
                         ?>
                     </select>
+                    
                 </div>
             </div>
 
@@ -47,36 +50,6 @@ if (!$pdo) {
                     <input type="text" class="form-control" id="numero_recibo" name="numero_recibo" placeholder="Ingrese el número de recibo" required readonly>
                 </div>
             </div>
-
-            <script>
-                document.getElementById('id_cliente').addEventListener('change', function() {
-                    const monto = document.getElementById('monto');
-                    const numeroRecibo = document.getElementById('numero_recibo');
-
-                    if (monto && numeroRecibo) {
-                        const selectedOption = this.options[this.selectedIndex];
-                        monto.value = selectedOption ? selectedOption.getAttribute('data-precio') : '';
-                        
-                        if (selectedOption) {
-                            const tipoDocumento = selectedOption.getAttribute('data-tipo-doc');
-                            $.ajax({
-                                url: 'consultar_numero_recibo.php',
-                                method: 'POST',
-                                data: {
-                                    tipo_documento: tipoDocumento
-                                },
-                                success: function(response) {
-                                    numeroRecibo.value = response;
-                                }
-                            }).fail(function() {
-                                console.error('Error al consultar número de recibo');
-                            });
-                        } else {
-                            numeroRecibo.value = 'B001-000001';
-                        }
-                    }
-                });
-            </script>
 
 
 
@@ -113,20 +86,9 @@ if (!$pdo) {
                     <textarea class="form-control" id="motivo_descuento" name="motivo_descuento"></textarea>
                 </div>
             </div>
-            <script>
-                document.getElementById('aplica_descuento').addEventListener('change', function() {
-                    const aplica_descuento = this.value;
-                    const div_motivo_descuento = document.getElementById('div_motivo_descuento');
+           
 
-                    if (aplica_descuento === '1') {
-                        div_motivo_descuento.style.display = 'block';
-                    } else {
-                        div_motivo_descuento.style.display = 'none';
-                    }
-                });
-            </script>
 
-            
             <div class="form-group">
                 <label for="subtotal" class="col-sm-12">Subtotal</label>
                 <div class="col-sm-12">
@@ -160,40 +122,118 @@ if (!$pdo) {
                     }
                 });
             </script>
+            
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
             <script>
-                function calcularIGV() {
-                    const monto = parseFloat(document.getElementById('monto').value) || 0;
-                    const descuento = parseFloat(document.getElementById('descuento').value) || 0;
-                    const montoTotal = monto - descuento;
-                  
-                    const selectedOption = document.getElementById('id_cliente').selectedOptions[0];
-                    const igvTarifa = selectedOption ? parseFloat(selectedOption.getAttribute('data-igv_tarifa')) : 0;
-                    document.getElementById('igv').value = igvTarifa.toFixed(2);
-                    document.getElementById('monto_total').value = (montoTotal + igvTarifa).toFixed(2);
-                    document.getElementById('subtotal').value = montoTotal.toFixed(2);
-                }
+    $(document).ready(function() {
+        const opcionesOriginales = $('#id_cliente').html();
 
-                document.getElementById('descuento').addEventListener('input', calcularIGV);
+        // Función para calcular valores relacionados
+        function actualizarValores(selectedOption) {
+            const precio = parseFloat(selectedOption.data('precio')) || 0;
+            const descuento = parseFloat($('#descuento').val()) || 0;
+            const igv = parseFloat(selectedOption.data('igv_tarifa')) || 0;
 
-                document.getElementById('id_cliente').addEventListener('change', function() {
-                    const monto = document.getElementById('monto');
-                    const selectedOption = this.options[this.selectedIndex];
-                    const precio = selectedOption ? parseFloat(selectedOption.getAttribute('data-precio')) : 0;
-                    const igvTarifa = selectedOption ? parseFloat(selectedOption.getAttribute('data-igv_tarifa')) : 0;
-                    const neto = precio - igvTarifa;
-                    monto.value = neto.toFixed(2);
-                    calcularIGV(); // Trigger calculation
-                });
-
-                const id_cliente = document.getElementById('id_cliente');
-                const id_cliente_hidden = document.getElementById('id_cliente_hidden');
-                id_cliente.addEventListener('change', function() {
-                    id_cliente_hidden.value = this.value;
-                });
-            </script>
-
+            const montoSinIgv = precio;
+            const montoTotal = montoSinIgv - descuento;
             
+            $('#monto').val(montoSinIgv.toFixed(2)); // Mostrar monto sin IGV
+            $('#subtotal').val(montoTotal.toFixed(2));
+            $('#igv').val(igv.toFixed(2));
+            $('#monto_total').val((montoTotal + igv).toFixed(2));
+        }
+
+        // Evento de búsqueda de cliente
+        function buscarPlanesCliente(query, callback) {
+            $('#loading').show();
+            $.ajax({
+                url: 'buscar_planes_cliente.php',
+                method: 'POST',
+                data: { query },
+                success: function(response) {
+                    $('#id_cliente').html(response);
+
+                    const selectedOption = $('#id_cliente option:selected');
+                    if (selectedOption.length) {
+                        actualizarValores(selectedOption);
+
+                        // Consultar y actualizar el número de recibo
+                        const tipoDocumento = selectedOption.data('tipo_documento');
+                        $.ajax({
+                            url: 'consultar_numero_recibo.php',
+                            method: 'POST',
+                            data: { tipo_documento: tipoDocumento },
+                            success: function(response) {
+                                $('#numero_recibo').val(response);
+                            },
+                            error: function() {
+                                console.error('Error al consultar número de recibo');
+                            }
+                        });
+                    }
+
+                    if (callback) callback(selectedOption);
+                },
+                error: function() {
+                    console.error('Error al buscar planes del cliente');
+                },
+                complete: function() {
+                    $('#loading').hide();
+                }
+            });
+        }
+
+        $('#buscar_cliente').on('input', function() {
+            const query = $(this).val();
+
+            if (query.length > 1) {
+                buscarPlanesCliente(query);
+            } else if (query.length === 0) {
+                $('#id_cliente').html(opcionesOriginales);
+                $('#monto, #subtotal, #igv, #monto_total').val('');
+                $('#numero_recibo').val('B001-000001');
+            }
+        });
+
+        $('#id_cliente').on('change', function() {
+            const selectedOption = $(this).find('option:selected');
+            if (selectedOption.length) {
+                actualizarValores(selectedOption);
+
+                const tipoDocumento = selectedOption.data('tipo_documento');
+                $.ajax({
+                    url: 'consultar_numero_recibo.php',
+                    method: 'POST',
+                    data: { tipo_documento: tipoDocumento },
+                    success: function(response) {
+                        $('#numero_recibo').val(response);
+                    },
+                    error: function() {
+                        console.error('Error al consultar número de recibo');
+                    }
+                });
+            }
+        });
+
+        $('#descuento').on('input', function() {
+            const selectedOption = $('#id_cliente option:selected');
+            if (selectedOption.length) {
+                actualizarValores(selectedOption);
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
 
             <div class="form-group">
                 <label for="Fecha_inicio" class="col-sm-12">Fecha de Emision</label>
@@ -222,78 +262,8 @@ if (!$pdo) {
                 </div>
             </div>
         </form>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                let opcionesOriginales = $('#id_cliente').html();
-                $('#buscar_cliente').on('input', function() {
-                    const query = $(this).val();
-                    if (query.length > 1) {
-                        $('#loading').show();
-                        $.ajax({
-                            url: 'buscar_planes_cliente.php',
-                            method: 'POST',
-                            data: {
-                                query
-                            },
-                            success: function(response) {
-                                $('#id_cliente').html(response);
-                                const selectedOption = $('#id_cliente').find('option:selected');
-                                const precio = selectedOption ? parseFloat(selectedOption.data('precio')) : 0;
-                                $('#monto').val(precio.toFixed(2));
-                                const descuento = parseFloat($('#descuento').val()) || 0;
-                                const montoTotal = precio - descuento;
-                                $('#subtotal').val(montoTotal.toFixed(2));
-                                const igv = (selectedOption ? parseFloat(selectedOption.data('igv_tarifa')) : 0).toFixed(2);
-                                $('#igv').val(igv);
-                                $('#monto_total').val((montoTotal + parseFloat(igv)).toFixed(2));
-                                
-                                $.ajax({
-                                    url: 'consultar_numero_recibo.php',
-                                    method: 'POST',
-                                    data: {
-                                        tipo_documento: selectedOption.data('tipo_documento')
-                                    },
-                                    success: function(response) {
-                                        $('#numero_recibo').val(response);
-                                    },
-                                    error: function() {
-                                        console.error('Error al consultar número de recibo');
-                                    }
-                                });
-
-
-
-                                function checkNumeroReciboExiste(tipoDocumento, numeroRecibo) {
-                                    // This function should make a synchronous AJAX call to verify if numeroRecibo exists
-                                    // This is a placeholder and should be implemented accordingly
-                                    return false;
-                                }
-                            },
-                            complete: function() {
-                                $('#loading').hide();
-                            }
-                        });
-                    } else if (query.length === 0) {
-                        $('#id_cliente').html(opcionesOriginales);
-                        $('#monto').val('');
-                        $('#monto_total').val('');
-                        $('#igv').val('');
-                        $('#numero_recibo').val('B001-000001');
-                    }
-                });
-
-                $('#descuento').on('input', function() {
-                    const precio = parseFloat($('#monto').val()) || 0;
-                    const descuento = parseFloat($(this).val()) || 0;
-                    const montoTotal = precio - descuento;
-                    $('#subtotal').val(montoTotal.toFixed(2));
-                    const igv = (selectedOption ? parseFloat(selectedOption.data('igv_tarifa')) : 0).toFixed(2);
-                    $('#igv').val(igv);
-                    $('#monto_total').val((montoTotal + parseFloat(igv)).toFixed(2));
-                });
-            });
-        </script>
+        
+       
         <?php include "../layout/parte2.php"; ?>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <?php
 
 require '../app/config.php';
-require '../app/sesion.php';
+
 $id = isset($_GET['id_recibo']) ? $_GET['id_recibo'] : null;
 
 
@@ -307,6 +307,7 @@ $codPlan = $codPlan->fetchColumn();
 
 $fecha_emision = (new DateTime($recibo['fecha_emision']))->format('d/m/Y');
 $fecha_vencimiento = (new DateTime($recibo['fecha_vencimiento']))->format('d/m/Y');
+$estado = $recibo['estado'] != 'PAGADO' ? 'NO PAGADO' : $recibo['estado'];
 $html = "
 <html>
 <head>
@@ -335,13 +336,15 @@ $html = "
                 display: none !important;
             }
         }
+            
     </style>
 </head>
 <body>
     <div class='buttons'>
         <button onclick='printRecibo()'>Imprimir</button>
-        
         <button onclick='downloadPDF()'>Descargar</button>
+        <p style='font-size: 10px' >Est.:{$estado}</p>
+
     </div>
     <div class='header'>
         " . (!empty($logoSrc) ? "<img src='{$logoSrc}' alt='Logo' class='logo'>" : "") . "

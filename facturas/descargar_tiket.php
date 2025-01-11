@@ -415,7 +415,7 @@ echo $html;
 <script>
     function sendEmail() {
         var numeroTelefono = '<?php echo (strpos($celular, "+51") === 0) ? $celular : "+51" . $celular; ?>';
-        var link = '<?php echo $URL; ?>/facturas/recibo_cliente.php?id_recibo=<?php echo $recibo["id_recibo"]; ?>';
+        var link = '<?php echo $URL; ?>/facturas/recibo_clientes.php?id_recibo=<?php echo $recibo["id_recibo"]; ?>';
         var whatsappUrl = 'https://api.whatsapp.com/send?phone=' + numeroTelefono + '&text=Descarga+tu+recibo+aqu%C3%AD%3A+' + encodeURIComponent(link);
         window.open(whatsappUrl, '_blank');
     }

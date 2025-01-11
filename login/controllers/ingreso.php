@@ -22,12 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Si los datos son correctos, se inicia la sesión y se redirige al index
             session_start();
             $_SESSION['sesion_email'] = $email;
-            echo json_encode(['success' => true]);
             header('Location: ../controllers/comprobaciones.php?id_usuario_sesion='.$usuario['id']);
-            
+            exit; // Asegúrate de terminar el script después de redirigir
         } else {
             // Si los datos son incorrectos, se muestra un mensaje de error
-            throw new Exception('Error: datos incorrectos');
+            echo json_encode(['success' => false, 'message' => 'Error: datos incorrectos']);
         }
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
