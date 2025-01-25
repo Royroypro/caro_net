@@ -1,40 +1,22 @@
 <?php
 include_once '../app/config.php';
 include_once '../app/controllers/clientes/consultar_cliente.php';
-
-
 ?>
 
 <div id="main-wrapper">
-    <?php
-
-    include_once '../layout/parte1.php';
-
-    $id = isset($_GET['id']) ? $_GET['id'] : null;
-    
-    ?>
+    <?php include_once '../layout/parte1.php'; ?>
     <div class="page-wrapper">
         <?php
-        
-
-
-        if ($cliente){
-            $id_cliente = htmlspecialchars($cliente['id_cliente'], ENT_QUOTES, 'UTF-8');
-            $id_planes_servicios = htmlspecialchars($cliente['id_planes_servicios'], ENT_QUOTES, 'UTF-8');
-            $Ip = htmlspecialchars($cliente['Ip'], ENT_QUOTES, 'UTF-8');
-            $Nombre_wifi = htmlspecialchars($cliente['Nombre_wifi'], ENT_QUOTES, 'UTF-8');
-            $Contraseña_wifi = htmlspecialchars($cliente['Contraseña_wifi'], ENT_QUOTES, 'UTF-8');
-            $Ubicacion = htmlspecialchars($cliente['Ubicacion'], ENT_QUOTES, 'UTF-8');
-            $Foto_ubicacion = htmlspecialchars($cliente['Foto_ubicacion'], ENT_QUOTES, 'UTF-8');
-            $Foto_router = htmlspecialchars($cliente['Foto_router'], ENT_QUOTES, 'UTF-8');
-            $Fecha_inicio = htmlspecialchars($cliente['Fecha_inicio'], ENT_QUOTES, 'UTF-8');
-            $Fecha_finalizacion = htmlspecialchars($cliente['Fecha_finalizacion'], ENT_QUOTES, 'UTF-8');
-            $Estado = htmlspecialchars($cliente['Estado'], ENT_QUOTES, 'UTF-8');
-            $nombre_plan = htmlspecialchars($cliente['nombre_plan'], ENT_QUOTES, 'UTF-8');
-            $tarifa_mensual = htmlspecialchars($cliente['tarifa_mensual'], ENT_QUOTES, 'UTF-8');
-          
-            $velocidad = htmlspecialchars($cliente['velocidad'], ENT_QUOTES,
-             'UTF-8');
+        if ($cliente) {
+            $nombre = htmlspecialchars($cliente['nombre'], ENT_QUOTES, 'UTF-8');
+            $apellido_paterno = htmlspecialchars($cliente['apellido_paterno'], ENT_QUOTES, 'UTF-8');
+            $apellido_materno = htmlspecialchars($cliente['apellido_materno'], ENT_QUOTES, 'UTF-8');
+            $dni_ruc = htmlspecialchars($cliente['dni_ruc'], ENT_QUOTES, 'UTF-8');
+            $tipo_documento = htmlspecialchars($cliente['tipo_documento'], ENT_QUOTES, 'UTF-8');
+            $celular = htmlspecialchars($cliente['celular'], ENT_QUOTES, 'UTF-8');
+            $email = htmlspecialchars($cliente['email'], ENT_QUOTES, 'UTF-8');
+            $direccion = htmlspecialchars($cliente['direccion'], ENT_QUOTES, 'UTF-8');
+            $referencia = htmlspecialchars($cliente['referencia'], ENT_QUOTES, 'UTF-8');
         }
         ?>
         <div class="container-fluid">
@@ -106,6 +88,8 @@ include_once '../app/controllers/clientes/consultar_cliente.php';
                 <br>
             </div>
         </div>
+    </div>
 </div>
 
 <?php include('../layout/parte2.php'); ?>
+

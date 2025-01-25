@@ -43,7 +43,7 @@ include_once '../layout/sesion.php';
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $stmt = $pdo->prepare("SELECT r.id_recibo, r.numero_recibo, r.Tipo_documento, r.dni_ruc, r.id_cliente, r.id_emisor, r.id_plan_servicio, r.fecha_emision, r.fecha_vencimiento, r.monto_unitario, r.descuento, r.monto_total, r.estado, r.estado_sunat, r.fecha_envio_sunat FROM recibos r ");
+                                        $stmt = $pdo->prepare("SELECT r.id_recibo, r.numero_recibo, r.Tipo_documento, r.dni_ruc, r.id_cliente, r.id_emisor, r.id_plan_servicio, r.fecha_emision, r.fecha_vencimiento, r.monto_unitario, r.descuento, r.monto_total, r.estado, r.estado_sunat, r.fecha_envio_sunat FROM recibos r ORDER BY r.fecha_emision DESC");
                                         $stmt->execute();
                                         $recibos = $stmt->fetchAll();
                                         $totalRecibos = count($recibos);
